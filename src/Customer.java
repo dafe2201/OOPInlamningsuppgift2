@@ -5,7 +5,6 @@ public class Customer {
     private final String personNr;
     private final String fullName;
     private final LocalDate latestPayment;
-    private LocalDate latestGymSession; // NULL i början // Ta bort.
 
     public Customer(String personNr, String fullName, LocalDate latestPayment) {
         this.personNr = personNr;
