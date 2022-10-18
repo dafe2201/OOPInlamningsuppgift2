@@ -23,15 +23,63 @@ public class MembershipTest {
     }
 
     @Test
-    public void getDateDifferenceTest() {
-        Customer customerOne = customers.get(0);
-        long expectedDays = 108;
+    public void createListFromFileTest(){
+        List<Customer> customersList;
+        customersList = fr.createListFromFile(customerTestUrl);
 
-        Assertions.assertEquals(expectedDays, m.getDateDifference(customerOne));
-        assertNotEquals(300, m.getDateDifference(customerOne));
+        assertNotNull(customers);
+        assertEquals(customersList.getClass(),customers.getClass());
+        assertEquals(3,customers.size());
+        assertEquals("Chamade Coriola",customers.get(2).getFullName());
+        assertNotNull(customers.get(1).getPersonNr());
+        assertNotNull(customers.get(2).getLatestPayment());
     }
 
-    //TODO VARFÖR SKA DENNA ENS FÅ EXISTERA
+
+    //TODO: Skriv en parameter boolean "isTest" till konsturktorn för searchCustomer. Lägg en if sats som säger vad den
+    //TODO: ska göra istället och ta bort ALL input.
+    //TODO: Vill jag testa något annat?
+    @Test
+    public void doesSearchCustomerReturnTypeCustomer(){
+        Customer customer = customers.get(0);
+
+        Assertions.assertEquals(customer.getClass(), m.searchCustomer(customers).getClass());
+    }
+
+    //TODO: Kontrollera på onsdag i syfte att säkerställa att testet går igenom på ett annat datum.
+    @Test
+    public void getDateDifferenceTest() {
+        LocalDate localDate = LocalDate.now();
+        Customer customer = new Customer("911225","Olle Ollesson",localDate);
+
+        System.out.println(m.getDateDifference(customer));
+        Assertions.assertEquals(0,m.getDateDifference(customer));
+    }
+
+    @Test
+    public void reportAttendancetoFileTest(){
+
+    }
+
+    /*    public void reportAttendanceToFile(String input) {
+        final Path urlAttendance = Path.of("src/Attendance.txt");
+
+        try (FileWriter f = new FileWriter(urlAttendance.toFile(), true);
+             BufferedWriter b = new BufferedWriter(f); PrintWriter p = new PrintWriter(b);) {
+
+            p.println(input);
+            p.flush();
+
+        } catch (IOException i) {
+            i.printStackTrace();
+            System.out.println("Skrivning till fil misslyckades.");
+        } catch (RuntimeException e) {
+            System.out.println("Skrivning till fil misslyckades.");
+            e.printStackTrace();
+        }
+
+    }*/
+
     @Test
     public void formatLocalDateTimeTest() {
 

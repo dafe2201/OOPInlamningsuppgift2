@@ -76,7 +76,6 @@ public class Membership {
             e.printStackTrace();
         }
 
-
     }
 
     public String buildAttendance(Customer customer) {
@@ -98,12 +97,14 @@ public class Membership {
     }
 
     public boolean doesntHaveMembership(long diff){
-        if (diff > 364){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return diff > 364;
+    }
+
+    public void printReportedAttendance(){
+        System.out.println("Kundens närvaro har registrerats.");
+    }
+    public void printNoReportedAttendance(){
+        System.out.println("Inget aktivt medlemsskap.\nIngen närvaro registrerades.");
     }
 
     public long getDateDifference(Customer customer) {
