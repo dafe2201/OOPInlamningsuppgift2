@@ -12,23 +12,25 @@ import java.util.Scanner;
 
 public class Membership {
 
-    LocalDateTime dateTimeNow = LocalDateTime.now();
-    Scanner scanner = new Scanner(System.in);
-    List<Customer> customers;
-
+    protected LocalDateTime dateTimeNow = LocalDateTime.now();
+    protected Scanner scanner = new Scanner(System.in);
+    protected List<Customer> customers;
 
 
     public Membership() {
-        final Path urlAttendance = Path.of("src/Attendance.txt");
         final Path urlCustomers = Path.of("src/Customers.txt");
         FileReader fr = new FileReader();
         customers = fr.createListFromFile(urlCustomers);
     }
 
 
-    public Customer searchCustomer(List<Customer> customers) {
+    public Customer searchCustomer(List<Customer> customers, boolean test) {
 
         while (true) {
+
+            if (test) {
+                return customers.get(0);
+            }
             System.out.println("Skriv in personnummer (xxxxxxxxxx), eller hela namnet: ");
             String input = scanner.nextLine();
 
@@ -36,10 +38,10 @@ public class Membership {
                 if (input.equals("3")) {
                     System.exit(0);
                 } else if (input.trim().equalsIgnoreCase(customer.getFullName().trim()) ||
-                        input.trim().contains(customer.getPersonNr())) {
+                        input.trim().contains(customer.getPersonalNr())) {
 
                     System.out.println("Hittade kund: \n" + "Personnummer: "
-                            + customer.getPersonNr() + " Namn: " + customer.getFullName() + "\n");
+                            + customer.getPersonalNr() + " Namn: " + customer.getFullName() + "\n");
 
                     return customer;
                 }
@@ -59,36 +61,51 @@ public class Membership {
         return formatter.format(dateTimeNow);
     }
 
-    public void reportAttendanceToFile(String input) {
-        final Path urlAttendance = Path.of("src/Attendance.txt");
+    public void reportAttendanceToFile(String input, Path urlAttendance, boolean test) {
 
-        try (FileWriter f = new FileWriter(urlAttendance.toFile(), true);
-             BufferedWriter b = new BufferedWriter(f); PrintWriter p = new PrintWriter(b);) {
+        if (test) {
+            try (FileWriter f = new FileWriter(urlAttendance.toFile(), false);
+                 BufferedWriter b = new BufferedWriter(f); PrintWriter p = new PrintWriter(b)) {
 
-            p.println(input);
-            p.flush();
 
-        } catch (IOException i) {
-            i.printStackTrace();
-            System.out.println("Skrivning till fil misslyckades.");
-        } catch (RuntimeException e) {
-            System.out.println("Skrivning till fil misslyckades.");
-            e.printStackTrace();
+                p.println(input);
+                p.flush();
+
+            } catch (IOException i) {
+                i.printStackTrace();
+                System.out.println("Skrivning till fil misslyckades.");
+            } catch (RuntimeException e) {
+                System.out.println("Skrivning till fil misslyckades.");
+                e.printStackTrace();
+            }
+
+        } else {
+            try (FileWriter f = new FileWriter(urlAttendance.toFile(), true);
+                 BufferedWriter b = new BufferedWriter(f); PrintWriter p = new PrintWriter(b)) {
+
+
+                p.println(input);
+                p.flush();
+
+            } catch (IOException i) {
+                i.printStackTrace();
+                System.out.println("Skrivning till fil misslyckades.");
+            } catch (RuntimeException e) {
+                System.out.println("Skrivning till fil misslyckades.");
+                e.printStackTrace();
+            }
+
         }
-
     }
-
     public String buildAttendance(Customer customer) {
-        StringBuilder b = new StringBuilder();
-
-        b.append(formatLocalDateTime(dateTimeNow)).append(", ").append(customer.getPersonNr()).append(", ")
-                .append(customer.getFullName()).append("\n");
-
-        return b.toString();
+        return formatLocalDateTime(dateTimeNow) + ", " + customer.getPersonalNr() + ", " +
+                customer.getFullName() + "\n";
     }
 
     public void printMembershipStatus(long diff) {
+
         System.out.println("Senaste betalning skedde för " + diff + " dagar sedan.");
+
         if (doesntHaveMembership(diff)) {
             System.out.println("Inget medlemskap.");
         } else {
@@ -96,18 +113,22 @@ public class Membership {
         }
     }
 
-    public boolean doesntHaveMembership(long diff){
+    public boolean doesntHaveMembership(long diff) {
         return diff > 364;
     }
 
-    public void printReportedAttendance(){
+    public void printReportedAttendance() {
+
         System.out.println("Kundens närvaro har registrerats.");
     }
-    public void printNoReportedAttendance(){
+
+    public void printNoReportedAttendance() {
+
         System.out.println("Inget aktivt medlemsskap.\nIngen närvaro registrerades.");
     }
 
     public long getDateDifference(Customer customer) {
+
         LocalDateTime latestPayment = dateToDateTime(customer.getLatestPayment());
         LocalDateTime dateTimeNow = LocalDateTime.now();
 
@@ -117,9 +138,7 @@ public class Membership {
     }
 
     public LocalDateTime dateToDateTime(LocalDate localDate) {
-        LocalDateTime localDateTime = localDate.atStartOfDay();
-
-        return localDateTime;
+        return localDate.atStartOfDay();
     }
 
 }

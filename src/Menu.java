@@ -1,14 +1,15 @@
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Menu {
 
-    Membership m;
-    Scanner scanner;
+   protected Membership m;
+   protected Scanner scanner;
+    final Path urlAttendance = Path.of("src/Attendance.txt");
 
     public Menu() {
         scanner = new Scanner(System.in);
         m = new Membership();
-        System.out.println(m.customers); //FIXME: Endast för test. Ta bort när klar.
         handleMenuChoice();
     }
 
@@ -28,11 +29,11 @@ public class Menu {
     }
 
     private void handleCustomerSearch() {
-        m.printMembershipStatus(m.getDateDifference(m.searchCustomer(m.customers)));
+        m.printMembershipStatus(m.getDateDifference(m.searchCustomer(m.customers,false)));
     }
 
     private void evaluateIfMember() {
-        Customer customer = m.searchCustomer(m.customers);
+        Customer customer = m.searchCustomer(m.customers, false);
         long diff = m.getDateDifference(customer);
 
         if (!m.doesntHaveMembership(diff)) {
@@ -45,7 +46,7 @@ public class Menu {
     }
 
     private void logSession(Customer customer){
-        m.reportAttendanceToFile(m.buildAttendance(customer));
+        m.reportAttendanceToFile(m.buildAttendance(customer),urlAttendance,false);
     }
 
     public void menuText() {

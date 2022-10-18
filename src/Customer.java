@@ -2,19 +2,19 @@ import java.time.LocalDate;
 
 public class Customer {
 
-    private final String personNr;
+    private final String personalNr;
     private final String fullName;
     private final LocalDate latestPayment;
 
     public Customer(String personNr, String fullName, LocalDate latestPayment) {
-        this.personNr = personNr;
+        this.personalNr = personNr;
         this.fullName = fullName;
         this.latestPayment = latestPayment;
     }
 
 
-    public String getPersonNr() {
-        return personNr;
+    public String getPersonalNr() {
+        return personalNr;
     }
 
     public String getFullName() {
@@ -28,7 +28,7 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-                "personNr='" + personNr + '\'' +
+                "personNr='" + personalNr + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", latestPayment=" + latestPayment +
                 '}';
