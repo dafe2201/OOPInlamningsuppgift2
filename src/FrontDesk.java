@@ -1,18 +1,19 @@
 import java.nio.file.Path;
 import java.util.Scanner;
 
-public class Menu {
+public class FrontDesk {
 
    protected Membership m;
    protected Scanner scanner;
     final Path urlAttendance = Path.of("src/Attendance.txt");
 
-    public Menu() {
+    public FrontDesk() {
         scanner = new Scanner(System.in);
         m = new Membership();
         handleMenuChoice();
     }
 
+    // Hantera val i huvudmenyn och skicka vidare utifrån input.
     public void handleMenuChoice() {
         while (true) {
             menuText();
@@ -20,19 +21,21 @@ public class Menu {
             String input = scanner.nextLine();
 
             switch (input) {
-                case "1" -> handleCustomerSearch();
-                case "2" -> evaluateIfMember();
+                case "1" -> validateMembership();
+                case "2" -> reportAttendance();
                 case "3" -> System.exit(0);
                 default -> System.out.println("\nHåll dig till valen i menyn");
             }
         }
     }
 
-    private void handleCustomerSearch() {
+    // Om man väljer menyval "1".
+    private void validateMembership() {
         m.printMembershipStatus(m.getDateDifference(m.searchCustomer(m.customers,false)));
     }
 
-    private void evaluateIfMember() {
+    // Om man väljer menyval "2".
+    private void reportAttendance() {
         Customer customer = m.searchCustomer(m.customers, false);
         long diff = m.getDateDifference(customer);
 
@@ -45,6 +48,7 @@ public class Menu {
         }
     }
 
+    //Fortsättning på menyval "2".
     private void logSession(Customer customer){
         m.reportAttendanceToFile(m.buildAttendance(customer),urlAttendance,false);
     }

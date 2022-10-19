@@ -12,7 +12,6 @@ public class Customer {
         this.latestPayment = latestPayment;
     }
 
-
     public String getPersonalNr() {
         return personalNr;
     }

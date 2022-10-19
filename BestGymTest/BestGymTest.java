@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MembershipTest {
+public class BestGymTest {
 
     Membership m = new Membership();
     FileReader fr = new FileReader();
@@ -18,10 +18,11 @@ public class MembershipTest {
     List<Customer> customers;
 
 
-    public MembershipTest() {
+    public BestGymTest() {
         customers = fr.createListFromFile(customerTestUrl);
     }
 
+    //Testar om List och Customer-objekt kan genereras från fil, samt att datan tas in på rätt sätt, i rätt format.
     @Test
     public void createListFromFileTest() {
         List<Customer> customersList;
@@ -34,9 +35,9 @@ public class MembershipTest {
         assertEquals("Chamade Coriola", customers.get(2).getFullName());
         assertNotNull(customers.get(1).getPersonalNr());
         assertNotNull(customers.get(2).getLatestPayment());
-
     }
 
+    //Testar att metoden fungerar genom att kontrollera att den kan returnera rätt typ.
     @Test
     public void doesSearchCustomerReturnTypeCustomer() {
         Customer customer = customers.get(0);
@@ -45,7 +46,8 @@ public class MembershipTest {
         assertNotNull(customer);
     }
 
-    //TODO: Kontrollera på onsdag i syfte att säkerställa att testet går igenom på ett annat datum.
+    //Testar att metod för att räkna ut differensen i dagar fungerar. "Olles" long latestPayment är satt till dagens
+    //datum för att testet ska fungera varje dag utan att manuellt behöva ändras.
     @Test
     public void getDateDifferenceTest() {
         LocalDate localDate = LocalDate.now();
@@ -55,6 +57,8 @@ public class MembershipTest {
         Assertions.assertEquals(0, m.getDateDifference(customer));
     }
 
+    // Kontrollerar att metoden m.reportAttendanceToFile kan skriva data till en fil. Formatet på data är för detta
+    // test irrelevant. Se buildAttendanceTest().
     @Test
     public void writeToFileTest() {
         m.reportAttendanceToFile(
@@ -74,6 +78,7 @@ public class MembershipTest {
         assertEquals("8512021234", customerOne.getPersonalNr());
     }
 
+    // Kontrollerar att datum och tid formateras på rätt sätt.
     @Test
     public void formatLocalDateTimeTest() {
 
@@ -81,6 +86,7 @@ public class MembershipTest {
         assert (m.formatLocalDateTime(LocalDateTime.now()).length() != 10);
     }
 
+    // Kontrollerar att metoden som räknar ut huruvida en Customer som finns i systemet har ett aktivt medlemskap.
     @Test
     public void hasMembershipTest() {
         long diff = 144;
@@ -89,6 +95,7 @@ public class MembershipTest {
         Assertions.assertTrue(m.doesntHaveMembership(400));
     }
 
+    // Kontrollerar att strängen som ska skrivas till Attendance.txt formateras på rätt sätt.
     @Test
     public void buildAttendanceTest() {
         Customer customerTwo = customers.get(1);
@@ -103,6 +110,7 @@ public class MembershipTest {
         assertNotEquals(val3, val1);
     }
 
+    // Testar att LocalDate kan formateras till LocalDateTime.
     @Test
     public void dateToDateTimeTest() {
         LocalDate localDate = LocalDate.now();
@@ -111,7 +119,5 @@ public class MembershipTest {
 
         assertEquals(localDateTimeExpected, localDateTimeActual);
     }
-
-
 }
 

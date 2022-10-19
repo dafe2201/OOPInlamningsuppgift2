@@ -14,19 +14,25 @@ public class FileReader {
         StringBuilder sb = new StringBuilder();
         List<Customer> customers = new ArrayList<>();
 
-        try(BufferedReader bufIn = Files.newBufferedReader(filePath)){
-            while ((line = bufIn.readLine()) != null){
+        try (BufferedReader in = Files.newBufferedReader(filePath)) {
+            while ((line = in.readLine()) != null) {
+                // Tar bort eventuella blanktecken och tillskriver "," vid slutet av varje line
                 sb.append(line.trim()).append(", ");
                 counter++;
-                if(counter >= 2) {
-                    sb.replace(sb.length() -2, sb.length() - 1, "");
+                if (counter >= 2) {
+                    // Tar bort komma
+                    sb.replace(sb.length() - 2, sb.length() - 1, "");
+                    // Tar bort sista "," för att kunna lägga till i array.
                     String[] currentLine = sb.toString().trim().split(", ");
+                    // Skapar och lägger till Customer i lista customers.
                     customers.add(new Customer(currentLine[0], currentLine[1], LocalDate.parse(currentLine[2])));
+                    // startar om räknaren.
                     counter = 0;
+                    // Rensar StringBuilder.
                     sb.setLength(0);
                 }
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Inläsning av fil misslyckades. Säkerställ att den ligger i src-mappen.");
         }
         return customers;
