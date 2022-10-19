@@ -37,8 +37,6 @@ public class FileReader {
         }
         return customers;
     }
-
-
 }
 
 
